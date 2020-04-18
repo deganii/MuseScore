@@ -7364,13 +7364,14 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
 
       const char* appName;
       const char* appName2;
+      // Don't interfere w/Production MuseScore
       if (MuseScore::unstable()) {
-            appName2 = "mscore-dev3";
-            appName  = "MuseScore3Development";
+            appName2 = "mscore-deganii-dev3";
+            appName  = "MuseScore3DevelopmentDeganii";
             }
       else {
-            appName2 = "mscore3";
-            appName  = "MuseScore3";
+            appName2 = "mscore3-deganii";
+            appName  = "MuseScore3Deganii";
             }
 
       MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, argv);

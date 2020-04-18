@@ -51,6 +51,7 @@
 
 namespace Ms {
       class Element;
+      class Fraction;
 };
 
 class SvgGeneratorPrivate;
@@ -77,6 +78,11 @@ class SvgGenerator : public QPaintDevice
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
     Q_PROPERTY(QIODevice* outputDevice READ outputDevice WRITE setOutputDevice)
     Q_PROPERTY(int resolution READ resolution WRITE setResolution)
+    Q_PROPERTY(int startTicks READ startTicks WRITE setStartTicks)
+    Q_PROPERTY(int endTicks READ endTicks WRITE setEndTicks)
+    Q_PROPERTY(qreal startTime READ startTime WRITE setStartTime)
+    Q_PROPERTY(qreal endTime READ endTime WRITE setEndTime)
+
 public:
     SvgGenerator();
     ~SvgGenerator();
@@ -86,6 +92,18 @@ public:
 
     QString description() const;
     void setDescription(const QString &description);
+
+    int endTicks() const;
+    void setEndTicks(const int &endTicks);
+
+    int startTicks() const;
+    void setStartTicks(const int &startTicks);
+
+    qreal startTime() const;
+    void setStartTime(const qreal &startTime);
+
+    qreal endTime() const;
+    void setEndTime(const qreal &endTime);
 
     QSize size() const;
     void setSize(const QSize &size);

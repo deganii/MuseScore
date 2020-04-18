@@ -2934,11 +2934,21 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
       double pr = MScore::pixelRatio;
-
       Page* page = pl.at(pageNumber);
+      // get start / end ticks and time
+      int startTicks = page->system(0)->firstMeasure()->tick().ticks();
+      int endTicks = page->endTick().ticks();
+      Ms::TempoMap* tempomap = score->tempomap();
+      qreal startTime = tempomap->tick2time(startTicks);
+      qreal endTime = tempomap->tick2time(endTicks);
+
       SvgGenerator printer;
       printer.setTitle(pages > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
       printer.setOutputDevice(device);
+      printer.setStartTime(startTime);
+      printer.setEndTime(endTime);
+      printer.setStartTicks(startTicks);
+      printer.setEndTicks(endTicks);
 
       QRectF r;
       if (trimMargin >= 0) {
