@@ -44,6 +44,14 @@
 #include "libmscore/image.h"
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
+#include "libmscore/note.h"
+#include "libmscore/noteevent.h"
+#include "libmscore/segment.h"
+#include "libmscore/measure.h"
+#include "libmscore/chord.h"
+#include "libmscore/score.h"
+#include "libmscore/tempo.h"
+#include "libmscore/sig.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
@@ -1153,6 +1161,32 @@ void SvgPaintEngine::updateState(const QPaintEngineState &s)
     // SVG class attribute, based on Ms::ElementType
     stateStream << SVG_CLASS << getClass(_element) << SVG_QUOTE;
 
+    if(_element->type() == Ms::ElementType::NOTE)
+    {
+        Ms::Note *cNote = (Ms::Note *)_element;
+        //Ms::NoteEvent *ne = cNote->noteEvent(0);
+        Ms::Chord *chord = cNote->chord();
+        Ms::Segment *seg = chord->segment();
+        int tick = seg -> tick().ticks();
+        int ticks = seg -> ticks().ticks();
+        //int rticks = seg -> rtick().ticks();
+        Ms::Measure *msr = chord->measure();
+        Ms::Score *sc = cNote->score();
+        Ms::TempoMap* tempomap = sc->tempomap();
+        qreal rtime = tempomap->tick2time(tick);
+        //qreal duration = tempomap->tick2time(ticks);
+        //Ms::NoteEvent *ne = cNote->playEvents()->first();
+        // add note event information
+        //stateStream << " data-len=\"" << ne-> len() << SVG_QUOTE;
+        //stateStream << " data-start=\"" << ne-> ontime() << SVG_QUOTE;
+        //stateStream << " data-end=\"" << ne-> offtime() << SVG_QUOTE;
+        stateStream << " pitch=\"" << cNote->pitch() << SVG_QUOTE;
+        //stateStream << " measure=\"" <<  << SVG_QUOTE;
+        stateStream << " tick=\"" << tick << SVG_QUOTE;
+        stateStream << " ticks=\"" << ticks << SVG_QUOTE;
+        //stateStream << " rticks=\"" << rticks << SVG_QUOTE;
+        stateStream << " timesec=\"" << rtime << SVG_QUOTE;
+    }
     // Brush and Pen attributes
     stateStream << qbrushToSvg(s.brush());
     stateStream <<   qpenToSvg(s.pen());
