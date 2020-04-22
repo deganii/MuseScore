@@ -1250,31 +1250,36 @@ void SvgPaintEngine::updateState(const QPaintEngineState &s)
     // SVG class attribute, based on Ms::ElementType
     stateStream << SVG_CLASS << getClass(_element) << SVG_QUOTE;
 
+    //TODO: Stems, Accidentals, Articulations, LedgerLines
+    //      Rests, Hooks, NoteDots all need metadata...
     if(_element->type() == Ms::ElementType::NOTE)
     {
         Ms::Note *cNote = (Ms::Note *)_element;
         //Ms::NoteEvent *ne = cNote->noteEvent(0);
         Ms::Chord *chord = cNote->chord();
+        int chordticks = chord->ticks().ticks();
         Ms::Segment *seg = chord->segment();
         int tick = seg -> tick().ticks();
-        int ticks = seg -> ticks().ticks();
+        //int ticks = seg -> ticks().ticks();
         //int rticks = seg -> rtick().ticks();
-        Ms::Measure *msr = chord->measure();
+        // Ms::Measure *msr = chord->measure();
         Ms::Score *sc = cNote->score();
         Ms::TempoMap* tempomap = sc->tempomap();
         qreal rtime = tempomap->tick2time(tick);
+        qreal rdur = tempomap->tick2time(chordticks);
         //qreal duration = tempomap->tick2time(ticks);
         //Ms::NoteEvent *ne = cNote->playEvents()->first();
         // add note event information
         //stateStream << " data-len=\"" << ne-> len() << SVG_QUOTE;
-        //stateStream << " data-start=\"" << ne-> ontime() << SVG_QUOTE;
+        //stateStream << " datimeloop-mapper arch/eyeriss_optical_4x4.yaml arch/components/* constraints/eyeriss_optical_map_constraints.yaml mapper/mapper.yaml ../../layer_shapes/AlexNet/AlexNet_layer1.yamlta-start=\"" << ne-> ontime() << SVG_QUOTE;
         //stateStream << " data-end=\"" << ne-> offtime() << SVG_QUOTE;
         stateStream << " pitch=\"" << cNote->pitch() << SVG_QUOTE;
         //stateStream << " measure=\"" <<  << SVG_QUOTE;
-        stateStream << " tick=\"" << tick << SVG_QUOTE;
-        stateStream << " ticks=\"" << ticks << SVG_QUOTE;
+        stateStream << " starttick=\"" << tick << SVG_QUOTE;
+        stateStream << " endtick=\"" << tick + chordticks << SVG_QUOTE;
         //stateStream << " rticks=\"" << rticks << SVG_QUOTE;
-        stateStream << " timesec=\"" << rtime << SVG_QUOTE;
+        stateStream << " starttime=\"" << rtime << SVG_QUOTE;
+        stateStream << " endtime=\"" << rtime + rdur << SVG_QUOTE;
     }
     // Brush and Pen attributes
     stateStream << qbrushToSvg(s.brush());
