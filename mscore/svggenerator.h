@@ -82,6 +82,9 @@ class SvgGenerator : public QPaintDevice
     Q_PROPERTY(int endTicks READ endTicks WRITE setEndTicks)
     Q_PROPERTY(qreal startTime READ startTime WRITE setStartTime)
     Q_PROPERTY(qreal endTime READ endTime WRITE setEndTime)
+    Q_PROPERTY(qreal startTempo READ startTempo WRITE setStartTempo)
+    Q_PROPERTY(int timesigNum READ timesigNum WRITE setTimesigNum)
+    Q_PROPERTY(int timesigDenom READ timesigDenom WRITE setTimesigDenom)
 
 public:
     SvgGenerator();
@@ -104,6 +107,15 @@ public:
 
     qreal endTime() const;
     void setEndTime(const qreal &endTime);
+
+    qreal startTempo() const;
+    void setStartTempo(const qreal &startTempo);
+
+    int timesigNum() const;
+    void setTimesigNum(const int &timesigNum);
+
+    int timesigDenom() const;
+    void setTimesigDenom(const int &timesigDenom);
 
     QSize size() const;
     void setSize(const QSize &size);

@@ -2938,9 +2938,13 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       // get start / end ticks and time
       int startTicks = page->system(0)->firstMeasure()->tick().ticks();
       int endTicks = page->endTick().ticks();
+      int timesigNum = page->system(0)->firstMeasure()->timesig().numerator();
+      int timesigDenom = page->system(0)->firstMeasure()->timesig().denominator();
       Ms::TempoMap* tempomap = score->tempomap();
       qreal startTime = tempomap->tick2time(startTicks);
       qreal endTime = tempomap->tick2time(endTicks);
+      qreal startTempo = tempomap->tempo(0);
+
 
       SvgGenerator printer;
       printer.setTitle(pages > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
@@ -2949,6 +2953,9 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       printer.setEndTime(endTime);
       printer.setStartTicks(startTicks);
       printer.setEndTicks(endTicks);
+      printer.setStartTempo(startTempo);
+      printer.setTimesigNum(timesigNum);
+      printer.setTimesigDenom(timesigDenom);
 
       QRectF r;
       if (trimMargin >= 0) {
