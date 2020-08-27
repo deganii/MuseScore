@@ -2936,10 +2936,17 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       double pr = MScore::pixelRatio;
       Page* page = pl.at(pageNumber);
       // get start / end ticks and time
-      int startTicks = page->system(0)->firstMeasure()->tick().ticks();
+      System* sys_0 = page->system(0);
+      Measure* first = sys_0->firstMeasure();
+      if (first == NULL){
+          // fix for weird issue where
+          // measure of first system is null
+           first = page->system(1)->firstMeasure();
+      }
+      int startTicks = first->tick().ticks();
       int endTicks = page->endTick().ticks();
-      int timesigNum = page->system(0)->firstMeasure()->timesig().numerator();
-      int timesigDenom = page->system(0)->firstMeasure()->timesig().denominator();
+      int timesigNum =  first->timesig().numerator();
+      int timesigDenom =  first->timesig().denominator();
       Ms::TempoMap* tempomap = score->tempomap();
       qreal startTime = tempomap->tick2time(startTicks);
       qreal endTime = tempomap->tick2time(endTicks);
